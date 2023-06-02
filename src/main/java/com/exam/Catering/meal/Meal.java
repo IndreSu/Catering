@@ -1,6 +1,7 @@
 package com.exam.Catering.meal;
 
 import com.exam.Catering.menu.Menu;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 public class Meal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -24,7 +25,8 @@ public class Meal {
 
     private Integer quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "menu_id") // Specify the correct column name for the foreign key relationship
+    @JsonIgnoreProperties("meals") // Exclude the meals field during serialization
     private Menu menu;
 }

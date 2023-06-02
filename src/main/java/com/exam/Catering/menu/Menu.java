@@ -1,6 +1,8 @@
 package com.exam.Catering.menu;
 
 import com.exam.Catering.meal.Meal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,8 +23,10 @@ public class Menu {
 
     private String title;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "meal_id") //AR (name = "menu_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "menu")
+//    @JoinColumn(name = "meal_id")
+//    @JsonIgnore // Add this annotation to ignore the meals field during serialization
+    @JsonIgnoreProperties("menu") // Exclude the meals field during serialization
     private List<Meal> meals;
 
 }

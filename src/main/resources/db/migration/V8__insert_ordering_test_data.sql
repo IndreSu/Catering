@@ -1,4 +1,4 @@
 INSERT INTO ORDERING (client_id, status) VALUES
-  (1, 'Confirmed'),
-  (2, 'Canceled'),
-  (3, 'Confirmed');
+  (1, 'CONFIRMED'),
+  (2, 'PENDING'),
+  (3, 'CONFIRMED');

@@ -1,6 +1,7 @@
 package com.exam.Catering.client;
 
-import com.exam.Catering.order.Ordering;
+import com.exam.Catering.ordering.Ordering;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,12 +17,13 @@ import java.util.List;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @JsonIgnore // Add this annotation to ignore the clients field during serialization
     private List<Ordering> orderings;
 
 }
