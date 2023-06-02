@@ -1,12 +1,14 @@
-package com.exam.Catering.order;
+package com.exam.Catering.ordering;
 
 import com.exam.Catering.client.Client;
 import com.exam.Catering.meal.Meal;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,11 +22,13 @@ public class Ordering {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
+    @JsonIgnore // Add this annotation to ignore the meals field during serialization
     private Client client;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore // Add this annotation to ignore the meals field during serialization
     @JoinTable(
             name = "ordering_meal",
             joinColumns = @JoinColumn(name = "ordering_id"),
@@ -33,5 +37,6 @@ public class Ordering {
     private List<Meal> meals;
 
     @Enumerated(EnumType.STRING)
-    private OrderingStatus status;
+    private OrderingStatus status = OrderingStatus.PENDING;
+
 }
