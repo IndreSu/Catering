@@ -3,6 +3,7 @@ package com.exam.Catering.menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +27,8 @@ public class MenuController {
 //        return new ResponseEntity<>(menus, HttpStatus.OK);
 //    }
 
-    @GetMapping
-    public ResponseEntity<List<Menu>> getAllMenusWithMeals() {
+    @GetMapping()
+    public ResponseEntity<List<Menu>> getAllMenus() {
         List<Menu> menus = menuService.getAllMenusWithMeals();
         return ResponseEntity.ok(menus);
     }

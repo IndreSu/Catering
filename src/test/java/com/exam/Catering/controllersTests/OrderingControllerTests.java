@@ -88,25 +88,25 @@ public class OrderingControllerTests {
         Assertions.assertEquals(result.getStatus(), OrderingStatus.CONFIRMED,"Get ordering by Id should return ordering with correct status");
     }
 
-    @Test
-    public void makeOrderingTest() {
-
-        Client client = new Client();
-        client.setId(1L);
-        List<Meal> meals = new ArrayList<>();
-        List<Long> mealIds = new ArrayList<>();
-
-        Ordering createdOrdering = new Ordering(1L, client, meals, OrderingStatus.PENDING);
-
-        when(orderingService.makeOrdering(client.getId(), mealIds)).thenReturn(createdOrdering);
-
-        OrderingController orderingController = new OrderingController(orderingService, clientRepository);
-
-        ResponseEntity<Ordering> responseEntity = orderingController.makeOrdering(1L, mealIds);
-
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(createdOrdering, responseEntity.getBody());
-    }
+//    @Test
+//    public void makeOrderingTest() {
+//
+//        Client client = new Client();
+//        client.setId(1L);
+//        List<Meal> meals = new ArrayList<>();
+//        List<Long> mealIds = new ArrayList<>();
+//
+//        Ordering createdOrdering = new Ordering(1L, client, meals, OrderingStatus.PENDING);
+//
+//        when(orderingService.makeOrdering(client.getId(), mealIds)).thenReturn(createdOrdering);
+//
+//        OrderingController orderingController = new OrderingController(orderingService, clientRepository);
+//
+//        ResponseEntity<Ordering> responseEntity = orderingController.makeOrdering(1L, mealIds);
+//
+//        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+//        assertEquals(createdOrdering, responseEntity.getBody());
+//    }
 
     @Test
     public void manageOrderTest() {

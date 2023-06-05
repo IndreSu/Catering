@@ -8,9 +8,9 @@ import com.exam.Catering.menu.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderingService {
@@ -49,19 +49,59 @@ public class OrderingService {
     }
 
     @Transactional
-    public Ordering makeOrdering(Long clientId, List<Long> mealIds) {
+    public Ordering makeOrdering(Long clientId, Map<Long, Integer> mealQuantities) {
         Client client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new IllegalArgumentException("Client not found with ID: " + clientId));
-
-        List<Meal> meals = mealRepository.findAllById(mealIds);
+                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
 
         Ordering ordering = new Ordering();
+
+        List<OrderedMeal> orderedMeals = new ArrayList<>();
+        for (Map.Entry<Long, Integer> entry : mealQuantities.entrySet()) {
+            Long mealId = entry.getKey();
+            Integer quantity = entry.getValue();
+
+            Meal meal = mealRepository.findById(mealId)
+                    .orElseThrow(() -> new IllegalArgumentException("Meal not found"));
+
+            OrderedMeal orderedMeal = new OrderedMeal();
+            orderedMeal.setMeal(meal);
+            orderedMeal.setQuantity(quantity);
+            orderedMeal.setOrdering(ordering);
+            orderedMeals.add(orderedMeal);
+        }
+
         ordering.setClient(client);
-        ordering.setMeals(meals);
+        ordering.setOrderedMeals(orderedMeals);
         ordering.setStatus(OrderingStatus.PENDING);
 
         return orderingRepository.save(ordering);
     }
+
+
+
+//    @Transactional
+//    public OrderingDto makeOrdering(Long clientId, List<MealDto> mealDtoList) {
+//        Client client = clientRepository.findById(clientId)
+//                .orElseThrow(() -> new IllegalArgumentException("Client not found with id: " + clientId));
+//
+//        Ordering ordering = new Ordering();
+//        ordering.setClient(client);
+//        ordering.setMeals(new ArrayList<>());
+//
+//        for (MealDto mealDto : mealDtoList) {
+//            Meal meal = mealRepository.findById(mealDto.getId())
+//                    .orElseThrow(() -> new IllegalArgumentException("Meal not found with id: " + mealDto.getId()));
+//
+//            meal.setQuantity(mealDto.getQuantity());
+//
+//            ordering.getMeals().add(meal);
+//        }
+//
+//        ordering.setStatus(OrderingStatus.PENDING);
+//
+//        Ordering savedOrdering = orderingRepository.save(ordering);
+//        return OrderingMapper.toOrderingDto(savedOrdering);
+//    }
 
     public OrderingDto manageOrderStatus(Long id, OrderingDto orderingDto) { //update order status
         Ordering existingOrdering = orderingRepository.findById(id)

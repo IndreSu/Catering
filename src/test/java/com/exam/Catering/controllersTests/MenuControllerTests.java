@@ -84,7 +84,7 @@ public class MenuControllerTests {
         when(menuService.addMenu(menuDto)).thenReturn(createdMenu);
 
         MenuController menuController = new MenuController(menuService);
-        menuController.getAllMenusWithMeals();
+        menuController.getAllMenus();
 
         ResponseEntity<MenuDto> response = menuController.addMenu(menuDto);
 

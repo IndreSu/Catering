@@ -34,12 +34,6 @@ public class MealService {
         return mealRepository.findById(mealId);
     }
 
-//    public MealDto addMeal(MealDto mealDto) {
-//        Meal meal = MealMapper.toMeal(mealDto);
-//        Meal savedMeal = mealRepository.save(meal);
-//        return MealMapper.toMealDto(savedMeal);
-//    }
-
     public MealDto addMeal(Long menuId, MealDto mealDto) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("Menu not found with id: " + menuId));
@@ -68,5 +62,4 @@ public class MealService {
 
         mealRepository.deleteById(id);
     }
-
 }

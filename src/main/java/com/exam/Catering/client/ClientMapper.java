@@ -6,7 +6,6 @@ public class ClientMapper {
 
         Client client = new Client();
         client.setName(clientDto.getName());
-//        client.setOrderings(clientDto.getOrderings());
 
         return client;
     }
@@ -15,7 +14,6 @@ public class ClientMapper {
 
         ClientDto clientDto = new ClientDto();
         clientDto.setName(client.getName());
-//        clientDto.setOrderings(client.getOrderings());
 
         return clientDto;
     }

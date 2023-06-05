@@ -38,12 +38,6 @@ public class OrderingController {
         return orderingService.getById(id);
     }
 
-    @PostMapping("/make")
-    public ResponseEntity<Ordering> makeOrdering(@RequestParam("clientId") Long clientId, @RequestBody List<Long> mealIds) {
-        Ordering createdOrdering = orderingService.makeOrdering(clientId, mealIds);
-        return new ResponseEntity<>(createdOrdering, HttpStatus.CREATED);
-    } //in postman url:http://localhost:8080/api/v1/orderings/make?clientId=1; body raw json: [1, 2, 3]. by default (set in ordering status is pending for new orders)
-
     @PutMapping("/{id}")
     public ResponseEntity<OrderingDto> manageOrderStatus(@PathVariable("id") Long id, @RequestBody OrderingDto orderingDto) { //update order status
         OrderingDto updatedOrdering = orderingService.manageOrderStatus(id, orderingDto);

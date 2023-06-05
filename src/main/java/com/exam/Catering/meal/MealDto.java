@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MealDto {
 
+    private Long id;
+
     private String title;
 
     private String description;
