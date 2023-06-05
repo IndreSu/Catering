@@ -24,8 +24,6 @@ public class Menu {
     private String title;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "menu")
-//    @JoinColumn(name = "meal_id")
-//    @JsonIgnore // Add this annotation to ignore the meals field during serialization
     @JsonIgnoreProperties("menu") // Exclude the meals field during serialization
     private List<Meal> meals;
 

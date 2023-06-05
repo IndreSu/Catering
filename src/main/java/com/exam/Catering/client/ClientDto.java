@@ -14,6 +14,4 @@ public class ClientDto {
 
     private String name;
 
-//    private List<Ordering> orderings;
-
 }

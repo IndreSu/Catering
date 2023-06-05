@@ -26,7 +26,7 @@ public class Meal {
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "menu_id") // Specify the correct column name for the foreign key relationship
+    @JoinColumn(name = "menu_id")
     @JsonIgnoreProperties("meals") // Exclude the meals field during serialization
     private Menu menu;
 }

@@ -26,7 +26,6 @@ public class MenuService {
             return menuRepository.findAllWithMeals();
     }
 
-
     public MenuDto addMenu(MenuDto menuDto) {
         Menu menu = MenuMapper.toMenu(menuDto);
         Menu savedMenu = menuRepository.save(menu);

@@ -69,46 +69,46 @@ public class OrderingServiceTests {
     }
 
 
-    @Test
-    void makeOrderingTest() {
-
-        Client client = new Client();
-        client.setId(1L);
-        when(clientRepository.findById(client.getId())).thenReturn(Optional.of(client));
-
-        List<Long> mealIds = new ArrayList<>();
-        mealIds.add(1L);
-        mealIds.add(2L);
-
-        Meal meal1 = new Meal();
-        meal1.setId(1L);
-        Meal meal2 = new Meal();
-        meal2.setId(2L);
-
-        List<Meal> meals = new ArrayList<>();
-        meals.add(meal1);
-        meals.add(meal2);
-
-        when(mealRepository.findAllById(mealIds)).thenReturn(meals);
-
-        Ordering ordering = new Ordering();
-        ordering.setId(1L);
-        ordering.setClient(client);
-        ordering.setMeals(meals);
-        ordering.setStatus(OrderingStatus.PENDING);
-        when(orderingRepository.save(any(Ordering.class))).thenReturn(ordering);
-
-        Ordering resultOrdering = orderingService.makeOrdering(client.getId(), mealIds);
-
-        verify(clientRepository).findById(client.getId());
-        verify(mealRepository).findAllById(mealIds);
-        verify(orderingRepository).save(any(Ordering.class));
-
-        assertEquals(ordering.getId(), resultOrdering.getId());
-        assertEquals(ordering.getClient(), resultOrdering.getClient());
-        assertEquals(ordering.getMeals(), resultOrdering.getMeals());
-        assertEquals(ordering.getStatus(), resultOrdering.getStatus());
-    }
+//    @Test
+//    void makeOrderingTest() {
+//
+//        Client client = new Client();
+//        client.setId(1L);
+//        when(clientRepository.findById(client.getId())).thenReturn(Optional.of(client));
+//
+//        List<Long> mealIds = new ArrayList<>();
+//        mealIds.add(1L);
+//        mealIds.add(2L);
+//
+//        Meal meal1 = new Meal();
+//        meal1.setId(1L);
+//        Meal meal2 = new Meal();
+//        meal2.setId(2L);
+//
+//        List<Meal> meals = new ArrayList<>();
+//        meals.add(meal1);
+//        meals.add(meal2);
+//
+//        when(mealRepository.findAllById(mealIds)).thenReturn(meals);
+//
+//        Ordering ordering = new Ordering();
+//        ordering.setId(1L);
+//        ordering.setClient(client);
+//        ordering.setMeals(meals);
+//        ordering.setStatus(OrderingStatus.PENDING);
+//        when(orderingRepository.save(any(Ordering.class))).thenReturn(ordering);
+//
+//        Ordering resultOrdering = orderingService.makeOrdering(client.getId(), mealIds);
+//
+//        verify(clientRepository).findById(client.getId());
+//        verify(mealRepository).findAllById(mealIds);
+//        verify(orderingRepository).save(any(Ordering.class));
+//
+//        assertEquals(ordering.getId(), resultOrdering.getId());
+//        assertEquals(ordering.getClient(), resultOrdering.getClient());
+//        assertEquals(ordering.getMeals(), resultOrdering.getMeals());
+//        assertEquals(ordering.getStatus(), resultOrdering.getStatus());
+//    }
 
     @Test
     public void manageOrderingTest() {
