@@ -1,8 +1,6 @@
 package com.exam.Catering.ordering;
 
-import com.exam.Catering.client.Client;
-import com.exam.Catering.client.ClientRepository;
-import com.exam.Catering.meal.MealDto;
+import com.exam.Catering.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +15,15 @@ import java.util.Optional;
 @RequestMapping("api/v1/orderings")
 public class OrderingController {
     private final OrderingService orderingService;
-    private final ClientRepository clientRepository;
+//    private final ClientRepository clientRepository;
+    private final UsersRepository userRepository;
 
     @Autowired
     public OrderingController(OrderingService orderingService,
-                              ClientRepository clientRepository) {
+                              UsersRepository usersRepository) {
         this.orderingService = orderingService;
-        this.clientRepository = clientRepository;
+//        this.clientRepository = clientRepository;
+        this.userRepository = usersRepository;
     }
 
     @GetMapping

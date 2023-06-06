@@ -1,28 +1,29 @@
 package com.exam.Catering.servisesTests;
 
-import com.exam.Catering.client.Client;
-import com.exam.Catering.client.ClientRepository;
-import com.exam.Catering.client.ClientService;
 import com.exam.Catering.meal.Meal;
 import com.exam.Catering.meal.MealDto;
 import com.exam.Catering.meal.MealRepository;
 import com.exam.Catering.meal.MealService;
 import com.exam.Catering.menu.MenuRepository;
 import com.exam.Catering.ordering.*;
+import com.exam.Catering.users.Users;
+import com.exam.Catering.users.UsersRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.client.ClientHttpRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
+import java.util.*;
+
+import static com.exam.Catering.security.ApplicationUserRole.CLIENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,10 +48,7 @@ public class OrderingServiceTests {
     MealRepository mealRepository;
 
     @Mock
-    ClientRepository clientRepository;
-
-    @Mock
-    ClientService clientService;
+    UsersRepository usersRepository;
 
     @Mock
     MealService mealService;
@@ -68,47 +66,58 @@ public class OrderingServiceTests {
         verify(orderingRepository).findById(Id);
     }
 
+    @Test
+    void makeOrderingTest() {
 
-//    @Test
-//    void makeOrderingTest() {
-//
-//        Client client = new Client();
-//        client.setId(1L);
-//        when(clientRepository.findById(client.getId())).thenReturn(Optional.of(client));
-//
-//        List<Long> mealIds = new ArrayList<>();
-//        mealIds.add(1L);
-//        mealIds.add(2L);
-//
-//        Meal meal1 = new Meal();
-//        meal1.setId(1L);
-//        Meal meal2 = new Meal();
-//        meal2.setId(2L);
-//
-//        List<Meal> meals = new ArrayList<>();
-//        meals.add(meal1);
-//        meals.add(meal2);
-//
-//        when(mealRepository.findAllById(mealIds)).thenReturn(meals);
-//
-//        Ordering ordering = new Ordering();
-//        ordering.setId(1L);
-//        ordering.setClient(client);
-//        ordering.setMeals(meals);
-//        ordering.setStatus(OrderingStatus.PENDING);
-//        when(orderingRepository.save(any(Ordering.class))).thenReturn(ordering);
-//
-//        Ordering resultOrdering = orderingService.makeOrdering(client.getId(), mealIds);
-//
-//        verify(clientRepository).findById(client.getId());
-//        verify(mealRepository).findAllById(mealIds);
-//        verify(orderingRepository).save(any(Ordering.class));
-//
-//        assertEquals(ordering.getId(), resultOrdering.getId());
-//        assertEquals(ordering.getClient(), resultOrdering.getClient());
-//        assertEquals(ordering.getMeals(), resultOrdering.getMeals());
-//        assertEquals(ordering.getStatus(), resultOrdering.getStatus());
-//    }
+        Long clientId = 1L;
+        Map<Long, Integer> mealQuantities = new HashMap<>();
+        mealQuantities.put(1L, 2);
+        mealQuantities.put(2L, 1);
+
+        Users client = new Users();
+        client.setId(clientId);
+        client.setUsername("John");
+        client.setRole(CLIENT);
+
+        Meal meal1 = new Meal();
+        meal1.setId(1L);
+        meal1.setTitle("Pancakes");
+
+        Meal meal2 = new Meal();
+        meal2.setId(2L);
+        meal2.setTitle("Hamburger");
+
+        // Mock repository calls
+        when(usersRepository.findById(clientId)).thenReturn(Optional.of(client));
+        when(mealRepository.findById(1L)).thenReturn(Optional.of(meal1));
+        when(mealRepository.findById(2L)).thenReturn(Optional.of(meal2));
+        when(orderingRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Call the method under test
+        Ordering result = orderingService.makeOrdering(clientId, mealQuantities);
+
+        // Verify the behavior and assertions
+        verify(usersRepository).findById(clientId);
+        verify(mealRepository).findById(1L);
+        verify(mealRepository).findById(2L);
+        verify(orderingRepository).save(any(Ordering.class));
+
+        assertNotNull(result);
+        assertEquals(client, result.getClient());
+        assertEquals(2, result.getOrderedMeals().size());
+
+        OrderedMeal orderedMeal1 = result.getOrderedMeals().get(0);
+        assertEquals(meal1, orderedMeal1.getMeal());
+        assertEquals(2, orderedMeal1.getQuantity());
+        assertEquals(result, orderedMeal1.getOrdering());
+
+        OrderedMeal orderedMeal2 = result.getOrderedMeals().get(1);
+        assertEquals(meal2, orderedMeal2.getMeal());
+        assertEquals(1, orderedMeal2.getQuantity());
+        assertEquals(result, orderedMeal2.getOrdering());
+
+        assertEquals(OrderingStatus.PENDING, result.getStatus());
+    }
 
     @Test
     public void manageOrderingTest() {
@@ -128,7 +137,7 @@ public class OrderingServiceTests {
         when(orderingRepository.findById(orderId)).thenReturn(Optional.of(existingOrdering));
         when(orderingRepository.save(existingOrdering)).thenReturn(updatedOrdering);
 
-        OrderingService orderingService = new OrderingService(orderingRepository, clientService, mealService, mealRepository, clientRepository, menuRepository);
+        OrderingService orderingService = new OrderingService(orderingRepository, mealService, mealRepository, menuRepository, usersRepository);
 
         OrderingDto result = orderingService.manageOrderStatus(orderId, orderingDto);
 
@@ -142,7 +151,7 @@ public class OrderingServiceTests {
         Long orderId = 1L;
 
         OrderingRepository orderingRepository = mock(OrderingRepository.class);
-        OrderingService orderingService = new OrderingService(orderingRepository, clientService, mealService, mealRepository, clientRepository, menuRepository);
+        OrderingService orderingService = new OrderingService(orderingRepository, mealService, mealRepository, menuRepository, usersRepository);
 
         orderingService.deleteOrdering(orderId);
 

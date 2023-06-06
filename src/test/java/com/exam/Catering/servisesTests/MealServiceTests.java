@@ -1,14 +1,11 @@
 package com.exam.Catering.servisesTests;
 
-import com.exam.Catering.client.Client;
-import com.exam.Catering.client.ClientDto;
 import com.exam.Catering.meal.Meal;
 import com.exam.Catering.meal.MealDto;
 import com.exam.Catering.meal.MealRepository;
 import com.exam.Catering.meal.MealService;
 import com.exam.Catering.menu.Menu;
 import com.exam.Catering.menu.MenuRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

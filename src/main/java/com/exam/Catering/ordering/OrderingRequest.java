@@ -7,6 +7,8 @@ import java.util.Map;
 @Data
 public class OrderingRequest{
 
+//    private Long clientId;
+
     private Long clientId;
 
     private Map<Long, Integer> mealQuantities;

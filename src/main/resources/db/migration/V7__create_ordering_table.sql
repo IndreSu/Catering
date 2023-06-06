@@ -4,8 +4,9 @@ CREATE TABLE IF NOT EXISTS ORDERING (
   status VARCHAR(255) NOT NULL,
 
   CONSTRAINT ORDERING_PK PRIMARY KEY (id),
-  FOREIGN KEY (client_id) REFERENCES CLIENT (id)
+  FOREIGN KEY (client_id) REFERENCES USERS (id)
 );
+
 
 
 --Order is a reserved keyword in database management system, that's why ORDERING
