@@ -1,14 +1,15 @@
 package com.exam.Catering.ordering;
 
-import com.exam.Catering.client.Client;
-import com.exam.Catering.client.ClientRepository;
-import com.exam.Catering.client.ClientService;
+//import com.exam.Catering.client.Client;
+//import com.exam.Catering.client.ClientRepository;
+//import com.exam.Catering.client.ClientService;
 import com.exam.Catering.meal.*;
 import com.exam.Catering.menu.MenuRepository;
+import com.exam.Catering.users.Users;
+import com.exam.Catering.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
@@ -16,26 +17,29 @@ import java.util.*;
 public class OrderingService {
 
     private final OrderingRepository orderingRepository;
-    private final ClientService clientService;
+//    private final ClientService clientService;
     private final MealService mealService;
     private final MealRepository mealRepository;
-    private final ClientRepository clientRepository;
+//    private final ClientRepository clientRepository;
     private final MenuRepository menuRepository;
+    private final UsersRepository userRepository;
 
     @Autowired
     public OrderingService(OrderingRepository orderingRepository,
-                           ClientService clientService,
+//                           ClientService clientService,
                            MealService mealService,
                            MealRepository mealRepository,
-                           ClientRepository clientRepository,
-                           MenuRepository menuRepository) {
+//                           ClientRepository clientRepository,
+                           MenuRepository menuRepository,
+                           UsersRepository userRepository) {
 
         this.orderingRepository = orderingRepository;
-        this.clientService = clientService;
+//        this.clientService = clientService;
         this.mealService = mealService;
         this.mealRepository = mealRepository;
-        this.clientRepository = clientRepository;
+//        this.clientRepository = clientRepository;
         this.menuRepository = menuRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Ordering> getAllOrderings() {
@@ -50,7 +54,8 @@ public class OrderingService {
 
     @Transactional
     public Ordering makeOrdering(Long clientId, Map<Long, Integer> mealQuantities) {
-        Client client = clientRepository.findById(clientId)
+        Users client = userRepository.findById(clientId)
+//        Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new IllegalArgumentException("Client not found"));
 
         Ordering ordering = new Ordering();
@@ -76,8 +81,6 @@ public class OrderingService {
 
         return orderingRepository.save(ordering);
     }
-
-
 
 //    @Transactional
 //    public OrderingDto makeOrdering(Long clientId, List<MealDto> mealDtoList) {

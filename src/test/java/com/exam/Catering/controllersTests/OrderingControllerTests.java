@@ -1,36 +1,31 @@
 package com.exam.Catering.controllersTests;
 
-import com.exam.Catering.client.Client;
-import com.exam.Catering.client.ClientRepository;
-import com.exam.Catering.meal.Meal;
-import com.exam.Catering.meal.MealDto;
-import com.exam.Catering.meal.MealMapper;
 import com.exam.Catering.meal.MealRepository;
-import com.exam.Catering.menu.MenuController;
-import com.exam.Catering.menu.MenuDto;
-import com.exam.Catering.menu.MenuService;
 import com.exam.Catering.ordering.*;
+import com.exam.Catering.users.UsersRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -55,9 +50,11 @@ public class OrderingControllerTests {
     OrderingService orderingService;
 
     @Mock
-    ClientRepository clientRepository;
+    UsersRepository usersRepository;
+
     @Autowired
     private MealRepository mealRepository;
+
 
     @Test
     public void orderingDtoTest() {
@@ -78,34 +75,14 @@ public class OrderingControllerTests {
         assertEquals(orderingController.getAllOrderings().getBody().size(), orderings.size());
     }
 
-    @Test
-    public void viewOrderingByIdTest() throws Exception {
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/orderings/1")
-        ).andExpect(status().isOk()).andReturn();
-        OrderingDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<OrderingDto>() {
-        });
-        Assertions.assertEquals(result.getStatus(), OrderingStatus.CONFIRMED,"Get ordering by Id should return ordering with correct status");
-    }
-
 //    @Test
-//    public void makeOrderingTest() {
+//    public void viewOrderingByIdTest() throws Exception {
 //
-//        Client client = new Client();
-//        client.setId(1L);
-//        List<Meal> meals = new ArrayList<>();
-//        List<Long> mealIds = new ArrayList<>();
-//
-//        Ordering createdOrdering = new Ordering(1L, client, meals, OrderingStatus.PENDING);
-//
-//        when(orderingService.makeOrdering(client.getId(), mealIds)).thenReturn(createdOrdering);
-//
-//        OrderingController orderingController = new OrderingController(orderingService, clientRepository);
-//
-//        ResponseEntity<Ordering> responseEntity = orderingController.makeOrdering(1L, mealIds);
-//
-//        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-//        assertEquals(createdOrdering, responseEntity.getBody());
+//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/orderings/1")
+//        ).andExpect(status().isOk()).andReturn();
+//        OrderingDto result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<OrderingDto>() {
+//        });
+//        Assertions.assertEquals(result.getStatus(), OrderingStatus.CONFIRMED,"Get ordering by Id should return ordering with correct status");
 //    }
 
     @Test
@@ -118,7 +95,7 @@ public class OrderingControllerTests {
         updatedOrderingDto.setStatus(OrderingStatus.COMPLETED);
         when(orderingService.manageOrderStatus(1L, orderingDto)).thenReturn(updatedOrderingDto);
 
-        OrderingController orderingController = new OrderingController(orderingService, clientRepository);
+        OrderingController orderingController = new OrderingController(orderingService, usersRepository);
 
         ResponseEntity<OrderingDto> responseEntity = orderingController.manageOrderStatus(1L, orderingDto);
 

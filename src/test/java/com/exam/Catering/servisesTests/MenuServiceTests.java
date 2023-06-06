@@ -1,9 +1,6 @@
 package com.exam.Catering.servisesTests;
 
-import com.exam.Catering.meal.Meal;
-import com.exam.Catering.meal.MealDto;
 import com.exam.Catering.meal.MealRepository;
-import com.exam.Catering.meal.MealService;
 import com.exam.Catering.menu.Menu;
 import com.exam.Catering.menu.MenuDto;
 import com.exam.Catering.menu.MenuRepository;
@@ -11,7 +8,6 @@ import com.exam.Catering.menu.MenuService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 

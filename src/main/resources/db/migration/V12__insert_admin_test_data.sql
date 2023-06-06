@@ -1,3 +1,3 @@
-INSERT INTO ADMIN (name) VALUES
-  ('Linda'),
-  ('Adam');
+--INSERT INTO ADMIN (name) VALUES
+--  ('Linda'),
+--  ('Adam');
