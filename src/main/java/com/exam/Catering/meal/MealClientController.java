@@ -3,6 +3,7 @@ package com.exam.Catering.meal;
 import com.exam.Catering.menu.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +28,7 @@ public class MealClientController {
         this.menuRepository = menuRepository;
     }
 
-    @GetMapping
+    @GetMapping (produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<MealDto>> getAllMeals() {
         List<MealDto> mealList = mealService.getAllMeals();
         return new ResponseEntity<>(mealList, HttpStatus.OK);
