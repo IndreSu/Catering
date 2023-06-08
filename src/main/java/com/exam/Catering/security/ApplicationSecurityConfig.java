@@ -35,6 +35,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors() // Enable CORS
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*", "/client/**").permitAll() //dalykai, kuriuos mato visi nepriklausomai nuo user role
@@ -46,7 +48,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter{
                 .authenticated()
                 .and()
 //                .httpBasic();
-                .formLogin();
+                .formLogin()
+                .loginProcessingUrl("/login") // Specify the login endpoint URL
+                .defaultSuccessUrl("/success") // Redirect to this URL on successful login
+                .failureUrl("/login?error") // Redirect to this URL on login failure
+                .permitAll();
     }
 
     @Override
